@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"oderwat.indent-rainbow",
+			"sirtori.indenticator",
+			"robertohuertasm.vscode-icons",
+			"ansonyeung.pascal-language-basics",
+			"formulahendry.code-runner"
+		]
+	},
+	"settings": {
+		"code-runner.executorMap": {
+			"pascal": "$driveLetter && cd $workspaceRoot && rm -rf tmp && mkdir tmp && cd $dir && fpc -dDEBUG -FU..\\tmp -Fu..\\units $fileName && mv $fileNameWithoutExt.exe $workspaceRoot\\bin\\$fileNameWithoutExt.exe && cd $workspaceRoot\\bin && rm -rf ..\\tmp && start $fileNameWithoutExt",
+		},
+		"code-runner.ignoreSelection": true,
+		"code-runner.saveAllFilesBeforeRun": true,
+		"code-runner.defaultLanguage": "pascal",
+		"editor.detectIndentation": false,
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false
+	}
+}
