@@ -1,6 +1,7 @@
 Program mark6;
 {$MACRO ON}
 {$DEFINE numBalls:=6}
+Uses MyCrtFallback, SysUtils;
 Type
 result = Array[1..6] Of Integer;
 
@@ -61,20 +62,47 @@ Begin
 		generator3[i] := balls[i];
 End;
 
-Procedure PrintResult(Const res: result);
-Var i: Integer;
+Procedure WritePx(Const x, y: Integer);
 Begin
-	For i := 1 To 6 Do
-		WriteLn(res[i]);
+	GoToXY(x * 2, y);
+	Write(#219, #219);
+End;
+
+Procedure DrawCircle(Const radius, xOffset, yOffset: Integer);
+Var theta: Real;
+Begin
+	ClrScr();
+	theta := 0.01;
+	While theta < 6.29 Do
+	Begin
+		WritePx(Trunc(radius + xOffset + Sin(theta) * radius), Trunc(radius + yOffset + Cos(theta) * radius));
+		theta := theta + 0.01;
+	End;
+End;
+
+Procedure PrintResult(Const res: result);
+Const oneSec: Real = 0.00001157407;
+Var
+i: Integer;
+start: TDateTime;
+pastSec: Integer;
+Begin
+	start := Time();
+	DrawCircle(75, 0, 0);
+	Sleep(10000);
+	pastSec := 0;
+	While Time() - start >= 0 Do
+	Begin
+		If Trunc((Time() - start) / oneSec) <> pastSec Then
+		Begin
+			pastSec := Trunc((Time() - start) / oneSec);
+		End;
+	End;
 End;
 
 Begin
+	CursorOff();
 	Randomize();
-	PrintResult(generator1);
-	WriteLn();
-	PrintResult(generator2);
-	WriteLn();
-	PrintResult(generator3);
-	WriteLn();
+	PrintResult(generator3());
 	ReadLn();
 End.
