@@ -10,7 +10,8 @@
 			"sirtori.indenticator",
 			"robertohuertasm.vscode-icons",
 			"ansonyeung.pascal-language-basics",
-			"formulahendry.code-runner"
+			"formulahendry.code-runner",
+			"webfreak.debug"
 		]
 	},
 	"settings": {
