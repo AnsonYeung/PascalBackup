@@ -87,6 +87,7 @@ i: Integer;
 start: TDateTime;
 pastSec: Integer;
 Begin
+	SetConsoleSize(300, 150);
 	start := Time();
 	DrawCircle(75, 0, 0);
 	Sleep(10000);
