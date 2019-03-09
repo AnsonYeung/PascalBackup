@@ -272,7 +272,7 @@ Const
 oneSec: Real = 0.00001157407;
 acc: Real = 50;
 ranV: Integer = 60;
-ballRadius: Integer = 5;
+ballRadius: Integer = 6;
 Var
 i: Integer;
 tmp1, tmp2: Integer;
@@ -294,8 +294,8 @@ Begin
 	pastSec := -32768;
 	For i := 1 To numBalls Do
 	Begin
-		balls[i].position.x := ballRadius * 2 * ((i - 1) Mod 5) + 59;
-		balls[i].position.y := ballRadius * 2 * ((i - 1) div 5) + 19;
+		balls[i].position.x := ballRadius * 2 * ((i - 1) Mod 5) + 55;
+		balls[i].position.y := ballRadius * 2 * ((i - 1) div 5) + 21;
 		balls[i].velocity.x := 0;
 		balls[i].velocity.y := 0;
 		balls[i].color := (i - 1) Mod 3;
@@ -348,7 +348,7 @@ Begin
 				Inc(i);
 			End;
 		End;
-		Sleep(50);
+		Sleep(62);
 	End;
 End;
 
