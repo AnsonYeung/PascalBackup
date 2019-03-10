@@ -18,6 +18,10 @@ End;
 Const
 numBalls = 49;
 
+Var
+ob: Array[0..(300 * 150 - 1)] Of Word;
+curColor: Word;
+
 Procedure Swap(Var x, y: Integer);
 Var t: Integer;
 Begin
@@ -75,20 +79,32 @@ Begin
 		generator3[i] := balls[i];
 End;
 
+Procedure PrintScr;
+Begin
+	WriteAttr(ob, 0, 0);
+End;
+
 Procedure WritePx(Const x, y: Integer);
 Begin
-	GoToXY(x * 2, y);
-	Write('  ');
+	{GoToXY(x * 2, y);
+	Write('  ');}
+	ob[x * 2 + y * 300] := curColor;
+	ob[x * 2 + y * 300 + 1] := curColor;
 End;
 
 Procedure WritePxN(Const x, y, n: Integer);
-Var s: AnsiString; i: Integer;
+Var i: Integer;
 Begin
-	s := '';
+	{s := '';
 	For i := 1 To n Do
 		s := s + '  ';
 	GoToXY(x * 2, y);
-	Write(s);
+	Write(s);}
+	For i := 1 To n Do
+	Begin
+		ob[x * 2 + y * 300 + i * 2 - 2] := curColor;
+		ob[x * 2 + y * 300 + i * 2 - 1] := curColor;
+	End;
 End;
 
 Procedure WriteNum(Const num, x, y: Integer);
@@ -280,18 +296,20 @@ start, last, past: TDateTime;
 pastSec: Integer;
 balls: Array[1..(numBalls)] Of Ball;
 b: Ball;
+fps: LongInt;
 Begin
 	SetConsoleFont('Consolas', 0, 6);
 	SetConsoleSize(300, 150);
-	SetConsoleColor(Black * 16 + White);
+	curColor := Black * 16;
 	ClrScr();
-	TextBackground(White);
+	curColor := White * 16;
 	DrawCircle(70, 75, 75, True);
-	TextBackground(Black);
+	curColor := Black * 16;
 	DrawCircle(69, 75, 75, True);
 	start := Time();
 	last := start;
 	pastSec := -32768;
+	fps := 0;
 	For i := 1 To numBalls Do
 	Begin
 		balls[i].position.x := ballRadius * 2 * ((i - 1) Mod 5) + 55;
@@ -302,7 +320,7 @@ Begin
 	End;
 	While True Do
 	Begin
-		TextBackground(Black);
+		curColor := Black * 16;
 		DrawCircle(69, 75, 75, False);
 		past := (Time() - last) / oneSec;
 		last := Time();
@@ -325,15 +343,27 @@ Begin
 		For i := 1 To numBalls Do
 		Begin
 			Case balls[i].color Of
-				0: TextBackground(Red);
-				1: TextBackground(Green);
-				2: TextBackground(Blue);
+				0: curColor := Red * 16;
+				1: curColor := Green * 16;
+				2: curColor := Blue * 16;
 			End;
 			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), False);
+			{ Glowing effect }
+			{curColor := White * 16;
+			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);}
 		End;
-		TextBackground(White);
+		curColor := White * 16;
 		If Trunc((Time() - start) / oneSec) <> pastSec Then
 		Begin
+			curColor := Black * 16;
+			WriteNum(-1, 0, 0);
+			WriteNum(-1, 4, 0);
+			WriteNum(-1, 8, 0);
+			curColor := White * 16;
+			WriteNum(fps Div 100, 0, 0);
+			WriteNum((fps Mod 100) Div 10, 4, 0);
+			WriteNum(fps Mod 10, 8, 0);
+			fps := 0;
 			pastSec := Trunc((Time() - start) / oneSec);
 			tmp1 := pastSec;
 			i := 1;
@@ -341,14 +371,16 @@ Begin
 			Begin
 				tmp2 := tmp1 Mod 10;
 				tmp1 := tmp1 Div 10;
-				TextBackground(Black);
+				curColor := Black * 16;
 				WriteNum(-1, 150 - i * 4, 1);
-				TextBackground(White);
+				curColor := White * 16;
 				WriteNum(tmp2, 150 - i * 4, 1);
 				Inc(i);
 			End;
 		End;
-		Sleep(62);
+		PrintScr();
+		Inc(fps);
+		Sleep(0);
 	End;
 End;
 
