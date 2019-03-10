@@ -286,8 +286,8 @@ End;
 Procedure PrintResult(Const res: mark6res);
 Const
 oneSec: Real = 0.00001157407;
-acc: Real = 50;
-ranV: Integer = 60;
+acc: Real = 1000;
+ranV: Integer = 200;
 ballRadius: Integer = 6;
 Var
 i: Integer;
@@ -327,7 +327,7 @@ Begin
 		For i := 1 To numBalls Do
 		Begin
 			b := balls[i];
-			If Not CircleInCircle(ballRadius, b.position.x + b.velocity.x * past, b.position.y + b.velocity.y * past + 1 / 2 * acc * past * past, 67, 75, 75) Then
+			If Not CircleInCircle(ballRadius, b.position.x + b.velocity.x * past, b.position.y + b.velocity.y * past + 1 / 2 * acc * past * past, 68, 75, 75) Then
 			Begin
 				b.velocity.x := Trunc(random() * ranV + random() * ranV + ranV) Mod (2 * ranV) - ranV;
 				b.velocity.y := Trunc(random() * ranV + random() * ranV + ranV) Mod (2 * ranV) - ranV;
@@ -380,7 +380,7 @@ Begin
 		End;
 		PrintScr();
 		Inc(fps);
-		Sleep(0);
+		Sleep(1);
 	End;
 End;
 
