@@ -21,6 +21,8 @@ numBalls = 49;
 Var
 ob: Array[0..(300 * 150 - 1)] Of Word;
 curColor: Word;
+t1: Array[0..(300 * 100 - 1)] Of Word;
+t2: Array[0..(300 * 50 - 1)] Of Word;
 
 Procedure Swap(Var x, y: Integer);
 Var t: Integer;
@@ -80,14 +82,19 @@ Begin
 End;
 
 Procedure PrintScr;
+Var i : LongInt;
 Begin
 	WriteAttr(ob, 0, 0);
+	For i := 0 To 300 * 100 - 1 Do
+		t1[i] := ob[i];
+	For i := 0 To 300 * 50 - 1 Do
+		t2[i] := ob[300 * 100 + i];
+	writeattr(t1, 0, 0);
+	writeattr(t2, 0, 100);
 End;
 
 Procedure WritePx(Const x, y: Integer);
 Begin
-	{GoToXY(x * 2, y);
-	Write('  ');}
 	ob[x * 2 + y * 300] := curColor;
 	ob[x * 2 + y * 300 + 1] := curColor;
 End;
@@ -95,11 +102,6 @@ End;
 Procedure WritePxN(Const x, y, n: Integer);
 Var i: Integer;
 Begin
-	{s := '';
-	For i := 1 To n Do
-		s := s + '  ';
-	GoToXY(x * 2, y);
-	Write(s);}
 	For i := 1 To n Do
 	Begin
 		ob[x * 2 + y * 300 + i * 2 - 2] := curColor;
@@ -280,13 +282,13 @@ End;
 
 Function CircleInCircle(Const r, x, y, rO, xO, yO: Real): Boolean;
 Begin
-	CircleInCircle := Sqrt(Sqr(x - xO) + Sqr(y - yO)) < (rO - r);
+	CircleInCircle := (Sqr(x - xO) + Sqr(y - yO)) < Sqr(rO - r);
 End;
 
 Procedure PrintResult(Const res: mark6res);
 Const
 oneSec: Real = 0.00001157407;
-acc: Real = 1000;
+acc: Real = 500;
 ranV: Integer = 200;
 ballRadius: Integer = 6;
 Var
@@ -300,7 +302,7 @@ fps: LongInt;
 Begin
 	SetConsoleFont('Consolas', 0, 6);
 	SetConsoleSize(300, 150);
-	curColor := Black * 16;
+	TextBackground(Black);
 	ClrScr();
 	curColor := White * 16;
 	DrawCircle(70, 75, 75, True);
@@ -310,6 +312,8 @@ Begin
 	last := start;
 	pastSec := -32768;
 	fps := 0;
+	For i := 0 To 300 * 150 - 1 Do
+		ob[i] := White;
 	For i := 1 To numBalls Do
 	Begin
 		balls[i].position.x := ballRadius * 2 * ((i - 1) Mod 5) + 55;
@@ -349,8 +353,8 @@ Begin
 			End;
 			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), False);
 			{ Glowing effect }
-			{curColor := White * 16;
-			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);}
+			curColor := White * 16;
+			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);
 		End;
 		curColor := White * 16;
 		If Trunc((Time() - start) / oneSec) <> pastSec Then
@@ -380,7 +384,7 @@ Begin
 		End;
 		PrintScr();
 		Inc(fps);
-		Sleep(1);
+		Sleep(0);
 	End;
 End;
 
