@@ -23,6 +23,8 @@
 		"code-runner.defaultLanguage": "pascal",
 		"editor.detectIndentation": false,
 		"editor.tabSize": 4,
-		"editor.insertSpaces": false
+		"editor.insertSpaces": false,
+		"editor.fontFamily": "Fira Code",
+		"editor.fontLigatures": true,
 	}
 }
