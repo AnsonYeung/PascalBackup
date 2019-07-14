@@ -2,6 +2,7 @@ Program mark6;
 {$MACRO ON}
 {$mode objfpc}
 {$inline on}
+{$DEFINE SplitPrint:=False}
 Uses Console, SysUtils;
 Type
 mark6res = Array[1..6] Of Integer;
@@ -84,13 +85,19 @@ End;
 Procedure PrintScr;
 Var i : LongInt;
 Begin
-	WriteAttr(ob, 0, 0);
-	For i := 0 To 300 * 100 - 1 Do
-		t1[i] := ob[i];
-	For i := 0 To 300 * 50 - 1 Do
-		t2[i] := ob[300 * 100 + i];
-	writeattr(t1, 0, 0);
-	writeattr(t2, 0, 100);
+	If SplitPrint Then
+	Begin
+		For i := 0 To 300 * 100 - 1 Do
+			t1[i] := ob[i];
+		For i := 0 To 300 * 50 - 1 Do
+			t2[i] := ob[300 * 100 + i];
+		WriteAttr(t1, 0, 0);
+		Writeattr(t2, 0, 100);
+	End
+	Else
+	Begin
+		WriteAttr(ob, 0, 0);
+	End;
 End;
 
 Procedure WritePx(Const x, y: Integer);
@@ -304,6 +311,8 @@ Begin
 	SetConsoleSize(300, 150);
 	TextBackground(Black);
 	ClrScr();
+	For i := 0 To 300 * 150 - 1 Do
+		ob[i] := White;
 	curColor := White * 16;
 	DrawCircle(70, 75, 75, True);
 	curColor := Black * 16;
@@ -312,8 +321,6 @@ Begin
 	last := start;
 	pastSec := -32768;
 	fps := 0;
-	For i := 0 To 300 * 150 - 1 Do
-		ob[i] := White;
 	For i := 1 To numBalls Do
 	Begin
 		balls[i].position.x := ballRadius * 2 * ((i - 1) Mod 5) + 55;
@@ -353,8 +360,8 @@ Begin
 			End;
 			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), False);
 			{ Glowing effect }
-			curColor := White * 16;
-			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);
+			{curColor := White * 16;
+			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);}
 		End;
 		curColor := White * 16;
 		If Trunc((Time() - start) / oneSec) <> pastSec Then
