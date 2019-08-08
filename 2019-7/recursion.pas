@@ -30,18 +30,20 @@ End;
 Function Power(a: Real; n: Real) : Real;
 Var i : Integer; result : Real;
 Begin
-    If a = 0 Then
-        If n <= 0 Then
-            Power := 0/0
-        Else
-            Power := 0
-    Else If a < 0 Then
-        If Abs(n) mod 2 = 0 Then
-            Power := Exp(n * Ln(-a))
-        Else
-            Power := -Exp(n * Ln(-a))
-    Else
-        Power := Exp(n * Ln(a));
+	If a = 0 Then
+		If n <= 0 Then
+			Power := 0/0
+		Else
+			Power := 0
+	Else If a < 0 Then
+		If n <> Trunc(n) Then
+			Power := sqrt(-1)
+		Else If Abs(Trunc(n)) mod 2 = 0 Then
+			Power := Exp(n * Ln(-a))
+		Else
+			Power := -Exp(n * Ln(-a))
+	Else
+		Power := Exp(n * Ln(a));
 End;
 
 Function fib1core(n: Integer): Real;
@@ -81,10 +83,21 @@ Begin
 		fib3 := 1;
 End;
 
+Function FindGoldenRatio(phi: Real): Real;
+Var calcPhi: Real;
+Begin
+	calcPhi := 1 + 1 / phi;
+	If calcPhi = phi Then
+		FindGoldenRatio := calcPhi
+	Else
+		FindGoldenRatio := FindGoldenRatio(calcPhi);
+End;
+
 Begin
 	fib := @fib1;
 	WriteLn(Factorial(15));
 	For i := 1 To 10 Do
 		WriteLn(fib(i));
+	WriteLn(FindGoldenRatio((1-sqrt(5)) /2):0:10);
 	ReadLn();
 End.
