@@ -1,4 +1,7 @@
 program recursion;
+Type fibFunc = function(n: Integer): Integer;
+Var i: Integer;
+	fib: fibFunc;
 procedure try1(y : Integer);
 Begin
 	y := y + 1;
@@ -24,7 +27,64 @@ Begin
 		factorial := 1;
 End;
 
+Function Power(a: Real; n: Real) : Real;
+Var i : Integer; result : Real;
 Begin
-	WriteLn(Factorial(17));
+    If a = 0 Then
+        If n <= 0 Then
+            Power := 0/0
+        Else
+            Power := 0
+    Else If a < 0 Then
+        If Abs(n) mod 2 = 0 Then
+            Power := Exp(n * Ln(-a))
+        Else
+            Power := -Exp(n * Ln(-a))
+    Else
+        Power := Exp(n * Ln(a));
+End;
+
+Function fib1core(n: Integer): Real;
+Begin
+	fib1core := (Power((1 + sqrt(5)) / 2, n) - Power((1 - sqrt(5)) / 2, n)) / sqrt(5);
+End;
+
+Function fib1(n: Integer): Integer;
+Begin
+	fib1 := Trunc(fib1core(n));
+End;
+
+Function fib2(n: Integer): Integer;
+Var i, a, b, t: Integer;
+Begin
+	If n <= 2 Then
+		fib2 := 1
+	Else
+	Begin
+		a := 1;
+		b := 1;
+		For i := 3 To n Do
+		Begin
+			t := a + b;
+			a := b;
+			b := t;
+		End;
+		fib2 := b;
+	End;
+End;
+
+Function fib3(n: Integer): Integer;
+Begin
+	If n > 2 Then
+		fib3 := fib3(n - 1) + fib3(n - 2)
+	Else
+		fib3 := 1;
+End;
+
+Begin
+	fib := @fib1;
+	WriteLn(Factorial(15));
+	For i := 1 To 10 Do
+		WriteLn(fib(i));
 	ReadLn();
 End.
