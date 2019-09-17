@@ -14,13 +14,18 @@ Begin
 	q.count := 0;
 End;
 
+Function QueueRear(q: queueType): Integer;
+Begin
+	QueueRear := (q.front + q.count - 2) Mod size + 1;
+End;
+
 Procedure enqueue(Var q: queueType; data: Integer; Var err: Integer);
 Begin
 	err := 0;
 	If q.count < size Then
 	Begin
 		Inc(q.count);
-		q.data[(q.front + q.count - 1) Mod size + 1] := data;
+		q.data[QueueRear(q)] := data;
 	End
 	Else
 		err := 1;
@@ -32,7 +37,7 @@ Begin
 	If q.count > 0 Then
 	Begin
 		data := q.data[q.front];
-		Inc(q.front);
+		q.front := q.front mod size + 1;
 		Dec(q.count);
 	End
 	Else
@@ -45,10 +50,10 @@ Begin
 	WriteLn();
 	Write('Queue data:');
 	For i := 1 to q.count Do
-		Write(q.data[(q.front + i - 1) Mod size + 1]:4);
+		Write(q.data[(q.front + i - 2) Mod size + 1]:4);
 	WriteLn();
 	WriteLn();
-	WriteLn('Front: ', q.front, ', Rear: ', (q.front + q.count - 1) Mod size, ', Count: ', q.count);
+	WriteLn('Front: ', q.front, ', Rear: ', QueueRear(q), ', Count: ', q.count);
 	WriteLn();
 End;
 
