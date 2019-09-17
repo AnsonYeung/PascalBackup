@@ -17,38 +17,38 @@ End;
 Procedure enqueue(Var q: queueType; data: Integer; Var err: Integer);
 Begin
 	err := 0;
-	If q.count = size Then
-	Begin
-		err := 1;
-	End
-	Else
+	If q.count < size Then
 	Begin
 		Inc(q.count);
 		q.data[(q.front + q.count - 1) Mod size + 1] := data;
-	End;
+	End
+	Else
+		err := 1;
 End;
 
 Procedure dequeue(Var q: queueType; Var data: Integer; Var err: Integer);
 Begin
 	err := 0;
-	If q.count = 0 Then
-	Begin
-		err := 1;
-	End
-	Else
+	If q.count > 0 Then
 	Begin
 		data := q.data[q.front];
 		Inc(q.front);
 		Dec(q.count);
-	End;
+	End
+	Else
+		err := 1;
 End;
 
 Procedure PrintQueue(q: queueType);
 Var i: Integer;
 Begin
+	WriteLn();
 	Write('Queue data:');
 	For i := 1 to q.count Do
 		Write(q.data[(q.front + i - 1) Mod size + 1]:4);
+	WriteLn();
+	WriteLn();
+	WriteLn('Front: ', q.front, ', Rear: ', (q.front + q.count - 1) Mod size, ', Count: ', q.count);
 	WriteLn();
 End;
 
