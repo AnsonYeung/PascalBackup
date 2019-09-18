@@ -1,4 +1,8 @@
-{ This unit can be a replacement to build-in unit crt }
+{
+	This unit can be a replacement to build-in unit crt.
+	For more details, please refer to the GitHub repository's README file.
+	https://github.com/AnsonYeung/PascalCrt
+}
 {$IFNDEF Windows}
 	{$Error Console unit is for Windows only, for other platforms, please use the native crt unit}
 {$ENDIF}
@@ -116,6 +120,7 @@ Procedure GoToXY(Const x, y: Integer);
 Procedure CursorOff();
 Procedure CursorOn();
 Procedure WriteAttr(Const attrs: Array Of Word; Const x, y: Integer);
+Function ReadKey(): Word;
 Procedure FlushInput();
 Function CreateBuffer(): Handle;
 Procedure SetActiveBuffer(ob: Handle);
@@ -333,6 +338,20 @@ Begin
 	loc.X := x;
 	loc.Y := y;
 	WriteConsoleOutputAttribute(hStdout, @attrs[0], High(attrs) + 1, loc, @cAttrsWritten);
+End;
+
+Function ReadKey(): Word;
+Var
+irInBuf: Array Of INPUT_RECORD;
+cNumRead: DWord;
+Begin
+	SetLength(irInBuf, 1);
+	SetConsoleMode(hStdin, ENABLE_EXTENDED_FLAGS Or ENABLE_ECHO_INPUT Or ENABLE_INSERT_MODE);
+	Repeat
+		ReadConsoleInputA(hStdin, @irInBuf[0], 1, @cNumRead);
+		ReadKey := irInBuf[0].Event.KeyEvent.wVirtualKeyCode;
+	Until (ReadKey <> 0) And Not irInBuf[0].Event.KeyEvent.bKeyDown;
+	SetConsoleMode(hStdin, ENABLE_WINDOW_INPUT Or ENABLE_MOUSE_INPUT Or ENABLE_EXTENDED_FLAGS Or ENABLE_ECHO_INPUT Or ENABLE_LINE_INPUT Or ENABLE_INSERT_MODE);
 End;
 
 Procedure FlushInput();
