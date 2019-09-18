@@ -1,4 +1,5 @@
 Program QueueDataType;
+Uses Console;
 Const size = 5;
 Type queueType = Record
 	front: Integer;
@@ -61,9 +62,12 @@ Begin
 	Init(queue);
 	Repeat
 		Write('What do you want to do? (1) enqueue (2) dequeue (3) exit > ');
-		ReadLn(input);
+		input := ReadKey();
+		ClrScr();
+		WriteLn('What do you want to do? (1) enqueue (2) dequeue (3) exit > ');
+		WriteLn();
 		Case input Of
-			1: Begin
+			$31, $61: Begin
 				Write('Input enqueue data > ');
 				ReadLn(data);
 				enqueue(queue, data, e);
@@ -72,7 +76,7 @@ Begin
 					1: WriteLn('Enqueue on full queue not allowed.');
 				End;
 			End;
-			2: Begin
+			$32, $62: Begin
 				dequeue(queue, data, e);
 				Case e Of
 					0: WriteLn('Dequeued ', data, ' from the queue.');
@@ -81,5 +85,6 @@ Begin
 			End;
 		End;
 		PrintQueue(queue);
-	Until input = 3;
+		GoToXY(0, 0);
+	Until (input = $33) Or (input = $63);
 End.
