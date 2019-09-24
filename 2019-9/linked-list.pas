@@ -1,4 +1,5 @@
 Program LnkedListProg;
+Uses Console;
 Const
 size = 5;
 null = -1;
@@ -14,6 +15,7 @@ Type LinkedList = Record
 End;
 
 Var l: LinkedList;
+	e: Integer;
 
 Procedure Init(Var l: LinkedList);
 Var i: Integer;
@@ -36,6 +38,15 @@ Begin
 		SearchFreePos := null;
 End;
 
+Function SearchDataPos(l: LinkedList; s: String): Integer;
+Var p: Integer;
+Begin
+	p := l.head;
+	While (p <> null) And (l.list[p].data <> s) Do
+		p := l.list[p].next;
+	SearchDataPos := p;
+End;
+
 Procedure InsertBegin(Var l: LinkedList; s: String; Var e: Integer);
 Var node: NodeType;
 	pos: Integer;
@@ -53,7 +64,7 @@ Begin
 		e := -1;
 End;
 
-Procedure InsertMiddle(Var l: LinkedList; s: String; prevNode: NodeType; Var e: Integer);
+Procedure InsertAfter(Var l: LinkedList; s: String; Var prevNode: NodeType; Var e: Integer);
 Var node: NodeType;
 	pos: Integer;
 Begin
@@ -70,6 +81,40 @@ Begin
 		e := -1;
 End;
 
+Procedure InsertAfter(Var l: LinkedList; s: String; prevStr: String; Var e: Integer);
+Var p: Integer;
 Begin
-	
+	p := SearchDataPos(l, prevStr);
+	InsertAfter(l, s, l.list[p], e);
+End;
+
+Procedure PrintList(l: LinkedList);
+Var i: Integer;
+Begin
+	WriteLn('+-----+---------------+-------+');
+	WriteLn('| pos |   data        | next  |');
+	WriteLn('+-----+---------------+-------+');
+	For i := 1 To size Do
+	Begin
+		Write('|', i:4, '|':2, l.list[i].data:14, '|':2, l.list[i].next:5, '|':3);
+		If l.head = i Then
+			Write(' (head)');
+		WriteLn();
+		WriteLn('+-----+---------------+-------+');
+	End;
+	WriteLn();
+End;
+
+Begin
+	Init(l);
+	PrintList(l);
+	InsertBegin(l, 'fdsa', e);
+	PrintList(l);
+	InsertAfter(l, 'A', 'fdsa', e);
+	PrintList(l);
+	InsertAfter(l, 'Happy', 'fdsa', e);
+	PrintList(l);
+	InsertBegin(l, 'Happy', e);
+	PrintList(l);
+	ReadKey();
 End.
