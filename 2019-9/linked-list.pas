@@ -47,6 +47,18 @@ Begin
 	SearchDataPos := p;
 End;
 
+Function SearchPrevPos(l: LinkedList; s: String): Integer;
+Var p: Integer;
+Begin
+	p := l.head;
+	While (l.list[p].next <> null) And (l.list[l.list[p].next].data <> s) Do
+		p := l.list[p].next;
+	If l.list[p].next <> null Then
+		SearchPrevPos := p
+	Else
+		SearchPrevPos := null;
+End;
+
 Procedure InsertBegin(Var l: LinkedList; s: String; Var e: Integer);
 Var node: NodeType;
 	pos: Integer;
@@ -88,19 +100,40 @@ Begin
 	InsertAfter(l, s, l.list[p], e);
 End;
 
+Procedure RemoveStr(Var l: LinkedList; str: String; Var e: Integer);
+Var p: Integer;
+Begin
+	e := 0;
+	p := SearchPrevPos(l, str);
+	If p <> null Then
+	Begin
+		l.list[p].next := l.list[l.list[p].next].next;
+	End
+	Else If l.list[l.head].data = str Then
+	Begin
+		l.head := l.list[l.head].next;
+	End
+	Else
+	Begin
+		e := -1;
+	End;
+End;
+
 Procedure PrintList(l: LinkedList);
 Var i: Integer;
+	c: Integer;
 Begin
-	WriteLn('+-----+---------------+-------+');
-	WriteLn('| pos |   data        | next  |');
-	WriteLn('+-----+---------------+-------+');
-	For i := 1 To size Do
+	WriteLn('+-----+-------+-------+---------------+');
+	WriteLn('| pos | index | next  |   data        |');
+	WriteLn('+-----+-------+-------+---------------+');
+	c := 1;
+	i := l.head;
+	While i <> null Do
 	Begin
-		Write('|', i:4, '|':2, l.list[i].data:14, '|':2, l.list[i].next:5, '|':3);
-		If l.head = i Then
-			Write(' (head)');
-		WriteLn();
-		WriteLn('+-----+---------------+-------+');
+		WriteLn('|', c:3, '|':3, i:4, '|':4, l.list[i].next:5, '|':3, l.list[i].data:14, '|':2);
+		WriteLn('+-----+-------+-------+---------------+');
+		i := l.list[i].next;
+		Inc(c);
 	End;
 	WriteLn();
 End;
@@ -108,13 +141,15 @@ End;
 Begin
 	Init(l);
 	PrintList(l);
-	InsertBegin(l, 'fdsa', e);
+	InsertBegin(l, 'foo', e);
 	PrintList(l);
-	InsertAfter(l, 'A', 'fdsa', e);
+	InsertAfter(l, 'baz', 'foo', e);
 	PrintList(l);
-	InsertAfter(l, 'Happy', 'fdsa', e);
+	InsertAfter(l, 'test', 'foo', e);
 	PrintList(l);
-	InsertBegin(l, 'Happy', e);
+	InsertBegin(l, 'bar', e);
+	PrintList(l);
+	RemoveStr(l, 'bar', e);
 	PrintList(l);
 	ReadKey();
 End.
