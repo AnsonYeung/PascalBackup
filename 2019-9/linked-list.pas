@@ -7,6 +7,7 @@ null = -1;
 Type NodeType = Record
 	data: String;
 	next: Integer;
+	prev: Integer;
 End;
 
 Type LinkedList = Record
@@ -24,6 +25,7 @@ Begin
 	Begin
 		l.list[i].data := '';
 		l.list[i].next := null;
+		l.list[i].prev := null;
 	End;
 	l.head := null;
 End;
@@ -50,13 +52,7 @@ End;
 Function SearchPrevPos(l: LinkedList; s: String): Integer;
 Var p: Integer;
 Begin
-	p := l.head;
-	While (l.list[p].next <> null) And (l.list[l.list[p].next].data <> s) Do
-		p := l.list[p].next;
-	If l.list[p].next <> null Then
-		SearchPrevPos := p
-	Else
-		SearchPrevPos := null;
+	SearchPrevPos := l.list[SearchDataPos(l, s)].prev;
 End;
 
 Procedure InsertBegin(Var l: LinkedList; s: String; Var e: Integer);
@@ -69,6 +65,9 @@ Begin
 	Begin
 		node.data := s;
 		node.next := l.head;
+		node.prev := null;
+		If l.head <> null Then
+			l.list[l.head].prev := pos;
 		l.list[pos] := node;
 		l.head := pos;
 	End
@@ -86,6 +85,13 @@ Begin
 	Begin
 		node.data := s;
 		node.next := prevNode.next;
+		node.prev := null;
+		If prevNode.prev <> null Then
+			node.prev := l.list[prevNode.prev].next
+		Else
+			node.prev := l.head;
+		If node.next <> null Then
+			l.list[node.next].prev := pos;
 		l.list[pos] := node;
 		prevNode.next := pos;
 	End
@@ -101,37 +107,47 @@ Begin
 End;
 
 Procedure RemoveStr(Var l: LinkedList; str: String; Var e: Integer);
-Var p: Integer;
+Var p, n, cur: Integer;
 Begin
 	e := 0;
-	p := SearchPrevPos(l, str);
-	If p <> null Then
+	cur := SearchDataPos(l, str);
+	If cur <> null Then
 	Begin
-		l.list[p].next := l.list[l.list[p].next].next;
-	End
-	Else If l.list[l.head].data = str Then
-	Begin
-		l.head := l.list[l.head].next;
+		p := l.list[cur].prev;
+		n := l.list[cur].next;
+		l.list[cur].data := '';
+		If p = null Then
+		Begin
+			l.head := n;
+			l.list[n].prev := null;
+		End
+		Else If n = null Then
+		Begin
+			l.list[p].next := null;
+		End
+		Else
+		Begin
+			l.list[p].next := l.list[cur].next;
+			l.list[l.list[cur].next].prev := p;
+		End;
 	End
 	Else
-	Begin
 		e := -1;
-	End;
 End;
 
 Procedure PrintList(l: LinkedList);
 Var i: Integer;
 	c: Integer;
 Begin
-	WriteLn('+-----+-------+-------+---------------+');
-	WriteLn('| pos | index | next  |   data        |');
-	WriteLn('+-----+-------+-------+---------------+');
+	WriteLn('+-----+------+-------+------+---------------+');
+	WriteLn('| pos | prev | index | next |   data        |');
+	WriteLn('+-----+------+-------+------+---------------+');
 	c := 1;
 	i := l.head;
 	While i <> null Do
 	Begin
-		WriteLn('|', c:3, '|':3, i:4, '|':4, l.list[i].next:5, '|':3, l.list[i].data:14, '|':2);
-		WriteLn('+-----+-------+-------+---------------+');
+		WriteLn('|', c:3, '|':3, l.list[i].prev:4, '|':3, i:4, '|':4, l.list[i].next:4, '|':3, l.list[i].data:14, '|':2);
+		WriteLn('+-----+------+-------+------+---------------+');
 		i := l.list[i].next;
 		Inc(c);
 	End;
