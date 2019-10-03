@@ -360,8 +360,10 @@ Begin
 			End;
 			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), False);
 			{ Glowing effect }
-			{curColor := White * 16;
-			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);}
+			{
+			curColor := White * 16;
+			DrawCircle(ballRadius, Round(balls[i].position.x), Round(balls[i].position.y), True);
+			}
 		End;
 		curColor := White * 16;
 		If Trunc((Time() - start) / oneSec) <> pastSec Then
@@ -391,7 +393,7 @@ Begin
 		End;
 		PrintScr();
 		Inc(fps);
-		Sleep(0);
+		Sleep(1);
 	End;
 End;
 
