@@ -108,24 +108,24 @@ INPUT_RECORD = Record
 End;
 
 Procedure SetConsoleTitle(Const title: AnsiString);
-Procedure SetConsoleFont(Const FaceName: FACETYPE; Const x, y: Integer);
+Procedure SetConsoleFont(Const FaceName: FACETYPE; Const x, y: Integer); // stay WinAPI
 Procedure SetConsoleSize(Const Width: Integer; Const Height: Integer);
-Procedure SetConsoleBuffer(Const Width: Integer; Const Height: Integer);
-Procedure PollConsoleInput(Var irInBuf: Array Of INPUT_RECORD; Const bufSize: DWord; Var cNumRead: DWord);
-Procedure PeekConsoleInput(Var irInBuf: Array Of INPUT_RECORD; Const bufSize: DWord; Var cNumRead: DWord);
+Procedure SetConsoleBuffer(Const Width: Integer; Const Height: Integer); // stay WinAPI
+Procedure PollConsoleInput(Var irInBuf: Array Of INPUT_RECORD; Const bufSize: DWord; Var cNumRead: DWord); // stay WinAPI, prolly with a internal queue?
+Procedure PeekConsoleInput(Var irInBuf: Array Of INPUT_RECORD; Const bufSize: DWord; Var cNumRead: DWord); // stay WinAPI
 Procedure ClrScr();
 Procedure SetConsoleColor(Const color: Word);
 Procedure TextBackground(Const color: Integer);
 Procedure TextColor(Const color: Integer);
 Procedure GoToXY(Const x, y: Integer);
-Procedure CursorOff();
-Procedure CursorOn();
-Procedure WriteAttr(Const attrs: Array Of Word; Const x, y: Integer);
-Function ReadKey(): Word;
-Procedure FlushInput();
-Function CreateBuffer(): Handle;
-Procedure SetActiveBuffer(ob: Handle);
-Function GetActiveBuffer(): Handle;
+Procedure CursorOff(); // ansi support: unknown
+Procedure CursorOn(); // same as above
+Procedure WriteAttr(Const attrs: Array Of Word; Const x, y: Integer); // not sure
+Function ReadKey(): Word; // packages/rtl-console/src/win/crt.pp
+Procedure FlushInput(); // WinAPI prob
+Function CreateBuffer(): Handle; // remove
+Procedure SetActiveBuffer(ob: Handle); // remove
+Function GetActiveBuffer(): Handle; // remove
 
 Implementation
 
