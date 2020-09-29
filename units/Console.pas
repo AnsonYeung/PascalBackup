@@ -389,7 +389,7 @@ Initialization
 	hStdin := GetStdHandle(STD_INPUT_HANDLE);
 	hStdout := GetStdHandle(STD_OUTPUT_HANDLE);
 	oldStdout := GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleOutputCP(437);
+	SetConsoleOutputCP(65001);
 	GetConsoleMode(hStdin, @fdwSaveOldMode);
 	SetConsoleMode(hStdin, defaultMode);
 Finalization
