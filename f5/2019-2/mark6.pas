@@ -2,7 +2,6 @@ Program mark6;
 {$MACRO ON}
 {$mode objfpc}
 {$inline on}
-{$DEFINE SplitPrint:=False}
 Uses Console, SysUtils;
 Type
 mark6res = Array[1..6] Of Integer;
@@ -22,8 +21,6 @@ numBalls = 49;
 Var
 ob: Array[0..(300 * 150 - 1)] Of Word;
 curColor: Word;
-t1: Array[0..(300 * 100 - 1)] Of Word;
-t2: Array[0..(300 * 50 - 1)] Of Word;
 
 Procedure Swap(Var x, y: Integer);
 Var t: Integer;
@@ -85,19 +82,7 @@ End;
 Procedure PrintScr;
 Var i : LongInt;
 Begin
-	If SplitPrint Then
-	Begin
-		For i := 0 To 300 * 100 - 1 Do
-			t1[i] := ob[i];
-		For i := 0 To 300 * 50 - 1 Do
-			t2[i] := ob[300 * 100 + i];
-		WriteAttr(t1, 0, 0);
-		Writeattr(t2, 0, 100);
-	End
-	Else
-	Begin
-		WriteAttr(ob, 0, 0);
-	End;
+	WriteAttr(ob, 0, 0);
 End;
 
 Procedure WritePx(Const x, y: Integer);
